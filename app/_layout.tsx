@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {useFonts} from 'expo-font';
-import {Stack} from 'expo-router';
+import {Link, Stack, useRouter} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
@@ -19,6 +19,8 @@ const InitialLayout = () => {
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
         ...FontAwesome.font,
     });
+    const router = useRouter();
+
     useEffect(() => {
         if (error) throw error;
     }, [error]);
@@ -40,17 +42,43 @@ const InitialLayout = () => {
                 headerShadowVisible: false,
                 headerStyle: {backgroundColor: Colors.background},
                 headerLeft: () => (
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={router.back}>
                         <Ionicons name="arrow-back" size={32} color={Colors.dark}/>
                     </TouchableOpacity>
                 )
+            }}/>
+            <Stack.Screen name="login" options={{
+                title: "",
+                headerBackTitle: '',
+                headerShadowVisible: false,
+                headerStyle: {backgroundColor: Colors.background},
+                headerLeft: () => (
+                    <TouchableOpacity onPress={router.back}>
+                        <Ionicons name="arrow-back" size={32} color={Colors.dark}/>
+                    </TouchableOpacity>
+                ),
+                headerRight: () => (
+                    <Link href={"/help"} asChild>
+                        <TouchableOpacity>
+                            <Ionicons name="help-circle-outline" size={32} color={Colors.dark}/>
+                        </TouchableOpacity>
+                    </Link>
+                )
+            }}/>
+            <Stack.Screen name="help" options={{
+                title: "",
+                presentation: "modal",
             }}/>
         </Stack>
     )
 }
 
 const RootLayoutNav = () => {
-    return <InitialLayout/>
+    return (
+        <>
+            <InitialLayout/>
+        </>
+    )
 }
 
 export default RootLayoutNav;
